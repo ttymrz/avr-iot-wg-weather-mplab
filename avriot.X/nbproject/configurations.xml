@@ -476,7 +476,6 @@
       </AVR-CPP>
       <AVR-GCC>
         <property key="additional-warnings" value="true"/>
-        <property key="appendMe" value=""/>
         <property key="call-prologues" value="false"/>
         <property key="default-bitfield-type" value="true"/>
         <property key="default-char-type" value="true"/>
@@ -488,7 +487,7 @@
         <property key="make-warnings-into-errors" value="false"/>
         <property key="no-interrupts" value="false"/>
         <property key="no-system-directories" value="false"/>
-        <property key="optimization-level" value="-O1"/>
+        <property key="optimization-level" value="-Os"/>
         <property key="pack-struct" value="true"/>
         <property key="preprocessor-macros" value=""/>
         <property key="preprocessor-macros-undefined" value=""/>
@@ -503,9 +502,8 @@
         <property key="verbose" value="false"/>
       </AVR-GCC>
       <AVR-Global>
-        <property key="appendMe" value=""/>
         <property key="common-include-directories"
-                  value=";mcc_generated_files/mqtt;mcc_generated_files/drivers;mcc_generated_files/config;mcc_generated_files/winc;mcc_generated_files;mcc_generated_files/CryptoAuthenticationLibrary"/>
+                  value="mcc_generated_files/mqtt;mcc_generated_files/drivers;mcc_generated_files/config;mcc_generated_files/winc;mcc_generated_files;mcc_generated_files/CryptoAuthenticationLibrary"/>
         <property key="eep" value="false"/>
         <property key="external-ram-check" value="false"/>
         <property key="hex" value="true"/>
