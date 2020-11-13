@@ -49,6 +49,7 @@ SOFTWARE.
 #if CFG_ENABLE_CLI
 #include "cli/cli.h"
 #endif
+#include "weather.h"
 
 
 #define MAIN_DATATASK_INTERVAL 100L
@@ -79,14 +80,33 @@ static void sendToCloud(void)
     static char publishMqttTopic[PUBLISH_TOPIC_SIZE];
     int rawTemperature = 0;
     int light = 0;
-    int len = 0;    
+    int len = 0;
+    float pressure = 0.0;
+    float humidity = 0.0;
+    float temprature = 0.0;
+    time_t now = time(NULL) + UNIX_OFFSET;
     sprintf(publishMqttTopic, "/devices/d%s/events", attDeviceID);
     // This part runs every CFG_SEND_INTERVAL seconds
     if (shared_networking_params.haveAPConnection)
     {
+        Weather_readSensors();
         rawTemperature = SENSORS_getTempValue();
         light = SENSORS_getLightValue();
-        len = sprintf(json, "{\"Light\":%d,\"Temp\":%d.%02d}", light,rawTemperature/100,abs(rawTemperature)%100);
+        pressure = Weather_getPressureKPa();
+        humidity = Weather_getHumidityRH();
+        temprature = Weather_getTemperatureDegC();
+        len = sprintf(json,
+            "{\"timestamp\":%lu,\"Light\":%d,\"Temp\":\"%d.%02d\",\"WCPressure\":%d.%02d,\"WCHumidity\":%d.%02d,\"WCTemprature\":%d.%02d}",
+            now,
+            light,
+            rawTemperature/100,
+            abs(rawTemperature)%100,
+            (int)pressure,
+            ((int)(pressure * 100) % 100),
+            (int)humidity,
+            ((int)(humidity * 100) % 100),
+            (int)temprature,
+            ((int)(fabs(temprature) * 100) % 100));
     }
     if (len >0) 
     {
