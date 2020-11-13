@@ -186,6 +186,8 @@
         <itemPath>mcc_generated_files/led.h</itemPath>
         <itemPath>mcc_generated_files/time_service.h</itemPath>
         <itemPath>mcc_generated_files/sensors_handling.h</itemPath>
+        <itemPath>mcc_generated_files/bme280.h</itemPath>
+        <itemPath>mcc_generated_files/weather.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -372,6 +374,8 @@
         <itemPath>mcc_generated_files/led.c</itemPath>
         <itemPath>mcc_generated_files/time_service.c</itemPath>
         <itemPath>mcc_generated_files/sensors_handling.c</itemPath>
+        <itemPath>mcc_generated_files/bme280.c</itemPath>
+        <itemPath>mcc_generated_files/weather.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
     </logicalFolder>
@@ -382,6 +386,9 @@
       <itemPath>MyConfig.mc3</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>mcc_generated_files</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">
