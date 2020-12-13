@@ -50,7 +50,11 @@
                 .if \is_public
                 .global \name
                 .endif
+            #ifdef __XC8
+                .section .text.\name, code
+            #else
                 .section .text.\name, "ax", @progbits
+            #endif
                 .type \name, @function
         \name :
         .endm
