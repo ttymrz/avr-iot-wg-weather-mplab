@@ -94,9 +94,6 @@ void wifi_reinit()
 
     wifiConnectionStateChangedCallback = callback_funcPtr;
 
-    winc_adapter_reset_assert();
-    DELAY_microseconds(100);
-    winc_adapter_reset_deassert();
     winc_adapter_init();
 
     m2m_wifi_init(&param);
