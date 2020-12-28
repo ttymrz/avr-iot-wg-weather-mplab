@@ -89,8 +89,10 @@ void wifi_reinit()
      
     param.pfAppWifiCb = wifiCallback;
     socketDeinit();
-    winc_hif_deinit(NULL);
+    // winc_hif_deinit(NULL);
+    m2m_wifi_deinit(&param);
     winc_adapter_deinit();
+
 
     wifiConnectionStateChangedCallback = callback_funcPtr;
 
