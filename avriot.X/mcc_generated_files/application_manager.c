@@ -50,7 +50,6 @@ SOFTWARE.
 #include "cli/cli.h"
 #endif
 #include "weather.h"
-#include "include/rstctrl.h"
 
 
 #define MAIN_DATATASK_INTERVAL 100L
@@ -58,7 +57,6 @@ SOFTWARE.
 #define SW_DEBOUNCE_INTERVAL   1460000L
 #define SW0_TOGGLE_STATE	   SW0_GetValue()
 #define SW1_TOGGLE_STATE	   SW1_GetValue()
-#define WIFI_ERR_TIMEOUT       9000L
 
 // This will contain the device ID, before we have it this dummy value is the init value which is non-0
 char attDeviceID[20] = "BAAAAADD1DBAAADD1D";
@@ -298,7 +296,6 @@ void runScheduler(void)
 uint32_t MAIN_dataTask(void *payload)
 {
     static uint32_t previousTransmissionTime = 0;
-    static uint32_t errorCount = 0;
     
     // Get the current time. This uses the C standard library time functions
     uint32_t timeNow = TIME_getCurrent();
@@ -357,19 +354,12 @@ uint32_t MAIN_dataTask(void *payload)
         ledParameterRed.onTime = SOLID_ON;
         ledParameterRed.offTime = SOLID_OFF;
         LED_control(&ledParameterRed);
-        // WiFi watchdog reset
-        errorCount++;
-        if (WIFI_ERR_TIMEOUT <= errorCount)
-        {
-            RSTCTRL_reset();
-        }
     }
     else
     {
         ledParameterRed.onTime = SOLID_OFF;
         ledParameterRed.offTime = SOLID_ON;
         LED_control(&ledParameterRed);
-        errorCount = 0;
     }
         
     // This is milliseconds managed by the RTC and the scheduler, this return 
