@@ -300,12 +300,13 @@ uint32_t MAIN_dataTask(void *payload)
 
     // Get the current time. This uses the C standard library time functions
     uint32_t timeNow = TIME_getCurrent();
-    // How many seconds since the last time this loop ran?
-    int32_t delta = TIME_getDiffTime(timeNow, previousTransmissionTime);
 
     // Example of how to send data when MQTT is connected every 1 second based on the system clock
     if(CLOUD_checkIsConnected())
     {
+       // How many seconds since the last time this loop ran?
+       int32_t delta = TIME_getDiffTime(timeNow, previousTransmissionTime);
+
         if (delta >= CFG_SEND_INTERVAL)
         {
             previousTransmissionTime = timeNow;
@@ -364,9 +365,16 @@ uint32_t MAIN_dataTask(void *payload)
         LED_control(&ledParameterRed);
     }
 
-    if ((delta >= (CFG_SEND_INTERVAL * 2)) && cloudneterr == 1)
+    if (cloudneterr == 1 && previousTransmissionTime != 0)
     {
-        CLOUD_reset();
+       // How many seconds since the last time this loop ran?
+       int32_t delta = TIME_getDiffTime(timeNow, previousTransmissionTime);
+
+        if (delta >= (CFG_SEND_INTERVAL * 2))
+        {
+            previousTransmissionTime = timeNow;
+            CLOUD_reset();
+        }
     }
 
     // This is milliseconds managed by the RTC and the scheduler, this return 
