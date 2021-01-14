@@ -296,7 +296,6 @@ void runScheduler(void)
 uint32_t MAIN_dataTask(void *payload)
 {
     static uint32_t previousTransmissionTime = 0;
-    uint8_t cloudneterr = 0;
 
     // Get the current time. This uses the C standard library time functions
     uint32_t timeNow = TIME_getCurrent();
@@ -319,7 +318,6 @@ uint32_t MAIN_dataTask(void *payload)
         ledParameterYellow.onTime = SOLID_OFF;
         ledParameterYellow.offTime = SOLID_ON;
         LED_control(&ledParameterYellow);
-        cloudneterr = 1;
     }
     
     // Blue LED
@@ -356,7 +354,6 @@ uint32_t MAIN_dataTask(void *payload)
         ledParameterRed.onTime = SOLID_ON;
         ledParameterRed.offTime = SOLID_OFF;
         LED_control(&ledParameterRed);
-        cloudneterr = 1;
     }
     else
     {
@@ -365,7 +362,7 @@ uint32_t MAIN_dataTask(void *payload)
         LED_control(&ledParameterRed);
     }
 
-    if (cloudneterr == 1 && previousTransmissionTime != 0)
+    if (previousTransmissionTime != 0)
     {
        // How many seconds since the last time this loop ran?
        int32_t delta = TIME_getDiffTime(timeNow, previousTransmissionTime);
