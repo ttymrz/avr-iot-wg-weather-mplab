@@ -296,6 +296,8 @@ void runScheduler(void)
 uint32_t MAIN_dataTask(void *payload)
 {
     static uint32_t previousTransmissionTime = 0;
+    static uint32_t errorStartTime = 0;
+    uint8_t cloudneterr = 0;
 
     // Get the current time. This uses the C standard library time functions
     uint32_t timeNow = TIME_getCurrent();
@@ -318,6 +320,7 @@ uint32_t MAIN_dataTask(void *payload)
         ledParameterYellow.onTime = SOLID_OFF;
         ledParameterYellow.offTime = SOLID_ON;
         LED_control(&ledParameterYellow);
+        cloudneterr = 1;
     }
     
     // Blue LED
@@ -354,6 +357,7 @@ uint32_t MAIN_dataTask(void *payload)
         ledParameterRed.onTime = SOLID_ON;
         ledParameterRed.offTime = SOLID_OFF;
         LED_control(&ledParameterRed);
+        cloudneterr = 1;
     }
     else
     {
@@ -362,16 +366,20 @@ uint32_t MAIN_dataTask(void *payload)
         LED_control(&ledParameterRed);
     }
 
-    if (previousTransmissionTime != 0)
+    if (cloudneterr == 1 && errorStartTime != 0)
     {
-       // How many seconds since the last time this loop ran?
-       int32_t delta = TIME_getDiffTime(timeNow, previousTransmissionTime);
+       // How many seconds since the last time error occurred?
+       int32_t delta = TIME_getDiffTime(timeNow, errorStartTime);
 
-        if (delta >= (CFG_SEND_INTERVAL * 2))
+        if (delta >= CFG_SEND_INTERVAL)
         {
-            previousTransmissionTime = timeNow;
+            errorStartTime = timeNow;
             CLOUD_reset();
         }
+    }
+    else
+    {
+        errorStartTime = timeNow;
     }
 
     // This is milliseconds managed by the RTC and the scheduler, this return 
