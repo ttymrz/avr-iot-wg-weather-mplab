@@ -371,7 +371,7 @@ uint32_t MAIN_dataTask(void *payload)
        // How many seconds since the last time error occurred?
        int32_t delta = TIME_getDiffTime(timeNow, errorStartTime);
 
-        if (delta >= (CFG_SEND_INTERVAL * 2))
+        if (delta >= CFG_SEND_INTERVAL)
         {
             errorStartTime = timeNow;
             CLOUD_reset();
@@ -385,7 +385,6 @@ uint32_t MAIN_dataTask(void *payload)
     // This is milliseconds managed by the RTC and the scheduler, this return 
     // makes the timer run another time, returning 0 will make it stop
     return MAIN_DATATASK_INTERVAL; 
-    
 }
 
 void application_post_provisioning(void)
